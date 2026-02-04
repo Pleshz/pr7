@@ -24,6 +24,16 @@
 		<title> Admin панель </title>
 		
 		<link rel="stylesheet" href="style.css">
+
+		<style>
+			table {
+				width: 100%;
+			}
+			td {
+				text-align: center;
+				padding: 10px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="top-menu">
@@ -38,10 +48,18 @@
 		</div>
 		<div class="space"> </div>
 		<div class="main">
-			<div class="content">
-				<input type="button" class="button" value="Выйти" onclick="logout()"/>
-				
+			<div class="content">				
 				<div class="name">Журнал событий</div>
+
+				<table border="1">
+					<tr>
+						<td style="width:170px">Дата и время</td>
+						<td style="width:170px">Ip пользователя</td>
+						<td style="width:170px">Время в сети</td>
+						<td style="width:170px">Статус</td>
+						<td>Событие</td>
+					</tr>
+				</table>
 						
 				<div class="footer">
 					© КГАПОУ "Авиатехникум", 2020
@@ -52,7 +70,41 @@
 		</div>
 		
 		<script>
-			
+			GetEvents();
+			function GetEvents() {
+				$.ajax({
+					url         : 'ajax/events/get.php',
+					type        : 'POST',
+					data        : null,
+					cache       : false,
+					dataType    : 'html',
+					processData : false,
+					contentType : false, 
+					success: GetEventsAjax,
+					error: function( ){
+						console.log('Системная ошибка!');
+					}
+				});
+			}
+
+			function GetEventsAjax(_data) {
+				console.log(_data);
+
+				let $table = $("table > tbody");
+				let events = JSON.parse(_data);
+
+				events.forEach((event) => {
+					$table.append(`
+						<tr>
+							<td>${event["Date"]}</td>
+							<td>${event["Ip"]}</td>
+							<td>${event["TimeOnline"]}</td>
+							<td>${event["Status"]}</td>
+							<td>${event["Event"]}</td>
+						</tr>
+					`);
+				});
+			}
 		</script>
 	</body>
 </html>
