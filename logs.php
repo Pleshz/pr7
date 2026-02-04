@@ -50,6 +50,7 @@
 		<div class="main">
 			<div class="content">				
 				<div class="name">Журнал событий</div>
+				<button onclick="exportLogs()">Создать logs.txt</button>
 
 				<table border="1">
 					<tr>
@@ -60,6 +61,7 @@
 						<td>Событие</td>
 					</tr>
 				</table>
+		
 						
 				<div class="footer">
 					© КГАПОУ "Авиатехникум", 2020
@@ -81,7 +83,7 @@
 					processData : false,
 					contentType : false, 
 					success: GetEventsAjax,
-					error: function( ){
+					error: function(){
 						console.log('Системная ошибка!');
 					}
 				});
@@ -104,6 +106,22 @@
 						</tr>
 					`);
 				});
+			}
+
+			function exportLogs() {
+				$.ajax({
+                	url: 'ajax/export_logs.php',
+                	type: 'POST',
+                	data: null,
+                	cache: false,
+                	dataType: 'json',
+                	success: function(response) {
+                	    console.log('Файл logs.txt успешно создан!');
+                	},
+                	error: function() {
+                	    console.log('Системная ошибка!');
+                	}
+            	});
 			}
 		</script>
 	</body>
